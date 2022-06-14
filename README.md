@@ -1,6 +1,6 @@
 # codingApple
 
-#### 유튜브 <span style="color:rad">코딩애플</span> 정리 및 코드 연습 저장소
+#### <span>유튜브 <span style="color:red">코딩애플</span> 정리 및 코드 연습 저장소 </span>
 
 ---------------------------
 
