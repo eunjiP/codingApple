@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- sketchfab.com 사이트에서 저작권확인하고 3D이미지(.glt)파일로 다운받아온다 -->
+    <canvas di="canvas" width="300" height="300"></canvas>
+    <!-- npm install three 라는 라이브러리 다운 -->
+    <!-- 만약 다운받기 힘들면 three.js라는 라이브러리 사용 -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.141.0/build/three.module.js",
+                "GLTFLoader" : "https://unpkg.com/three@0.141.0/examples/jsm/loaders/GLTFLoader.js"
+            }
+        }
+    </script>
+    <script type="module">
+        import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
+        import * as THREE from 'three';
+
+        // 3D model을 브라우저에 보여주는 법
+        // 1)장면 만들기
+        // 2)브라우저에 렌더링해주기
+
+        //장면(도화지) 만들기(장면에 도형 추가는 scene.add(추가하려는 도형))
+        let scene = new THREE.Scene();
+        //내가 만든 브라우저에 렌더링 해주세요
+        let renderer = new THREE.WebGLRenderer({
+           canvas : document.querySelector('#canvas'),
+           //이미지의 테두리계단현상을 좀더 부드럽게 해준다
+           antialias : true
+        });
+        //이미지 색상 밝기조절
+        renderer.outputEncoding = THREE.sRGBEncoding;
+
+        //카메라 생성(종류 : PerspectiveCamera(원근법 적용)/OrthographicCamera(원근법 적용X))
+        let camera = new THREE.PerspectiveCamera(30, 1);
+        //카메라 위치조정
+        camera.position.set(0, 0, 5);
+
+        //배경, 조명생성 및 추가
+        scene.background = new THREE.Color('white');
+        let light = new THREE.DirectionalLight(0xffff00, 10);
+        scene.add(light);
+
+        //하지만 glt파일은 GLTFLoader()를 이용해서 추가 가능하다
+        let loader = new GLTFLoader();
+        //주소값 가지고 오기
+        loader.load('shiba/scene.gltf', function(gltf) {
+            //장면에 추가
+            scene.add(gltf.scene);
+
+            //회전 애니메이션 적용
+            //심화)마우스컨트롤 : Three.js내의 OrbitControl가져다가 쓰면 가능
+            function animate() {
+                requestAnimationFrame(animate);
+                //glt파일을 조금식 회전시켜서 그걸 계속 렌더링한다
+                gltf.scene.rotation.y += 0.001;
+                //렌더링
+                renderer.render(scene, camera);
+            }
+
+            
+        });
+        
+        //3D model보여줄때 필요한 것들
+        //1.카메라 2.조명 3.배경
+        
+
+    </script>
+</body>
+</html>
